@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="梅提商城">
+  <rect width="64" height="64" rx="16" fill="#1f4d3a"/>
+  <path d="M15 27 20 15h24l5 12v22H15V27Z" fill="#f4efe3"/>
+  <path d="M20 15h24l-3 9H23l-3-9Z" fill="#d88945"/>
+  <path d="M25 31h14v18H25V31Z" fill="#315f4b"/>
+  <path d="M28 34h8v15h-8V34Z" fill="#f4efe3"/>
+  <circle cx="34" cy="41" r="1.5" fill="#d88945"/>
+  <path d="M15 27c3 3 6 3 8.5 0 2.5 3 5.5 3 8.5 0 2.8 3 5.8 3 8.5 0 2.7 3 5.7 3 8.5 0v4H15v-4Z" fill="#d88945"/>
+</svg>

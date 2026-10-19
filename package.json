@@ -1,0 +1,15 @@
+{
+  "name": "meiti-employee-management",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "梅提商城员工管理系统",
+  "scripts": {
+    "start": "node scripts/serve.js",
+    "test": "node --test tests/core.test.js",
+    "check": "node --check assets/js/core.js && node --check assets/js/data.js && node --check assets/js/app.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
