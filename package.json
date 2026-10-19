@@ -11,5 +11,10 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "homepage": "https://loven-cn.github.io/meiti-employee-management/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loven-CN/meiti-employee-management.git"
   }
 }

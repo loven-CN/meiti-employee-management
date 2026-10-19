@@ -6,7 +6,9 @@
 
 部署完成后访问：
 
-`https://<github-username>.github.io/meiti-employee-management/`
+`https://loven-cn.github.io/meiti-employee-management/`
+
+仓库地址：`https://github.com/loven-CN/meiti-employee-management`
 
 ## 演示账号
 
