@@ -1,13 +1,13 @@
 export const SHIFT_PERIODS = [
-  { id: 'morning', name: '上午班', time: '08:00 - 14:00', shortTime: '08:00', color: 'green' },
-  { id: 'afternoon', name: '下午班', time: '14:00 - 20:00', shortTime: '14:00', color: 'amber' },
-  { id: 'evening', name: '晚班', time: '20:00 - 02:00', shortTime: '20:00', color: 'blue' },
+  { id: 'morning', name: 'Morning', time: '08:00 - 14:00', shortTime: '08:00', color: 'green' },
+  { id: 'afternoon', name: 'Afternoon', time: '14:00 - 20:00', shortTime: '14:00', color: 'amber' },
+  { id: 'evening', name: 'Evening', time: '20:00 - 02:00', shortTime: '20:00', color: 'blue' },
 ];
 
 export const ROLE_META = {
-  hr: { name: 'HR', fullName: '人力资源', tone: 'green' },
-  supervisor: { name: 'Supervisor', fullName: '门店主管', tone: 'amber' },
-  employee: { name: 'Ordinary Employee', fullName: '普通员工', tone: 'blue' },
+  hr: { name: 'HR', fullName: 'Human Resources', tone: 'green' },
+  supervisor: { name: 'Supervisor', fullName: 'Store Supervisor', tone: 'amber' },
+  employee: { name: 'Ordinary Employee', fullName: 'Ordinary Employee', tone: 'blue' },
 };
 
 const PERMISSIONS = {
@@ -33,7 +33,7 @@ export function roleName(role) {
 }
 
 export function normalizeSearch(value) {
-  return String(value ?? '').trim().toLocaleLowerCase('zh-CN');
+  return String(value ?? '').trim().toLocaleLowerCase('en-US');
 }
 
 export function filterEmployees(employees, { query = '', departmentId = '', status = '' } = {}) {
@@ -50,7 +50,7 @@ export function filterEmployees(employees, { query = '', departmentId = '', stat
 }
 
 export function sortEmployees(employees, key = 'name', direction = 'asc') {
-  const collator = new Intl.Collator('zh-CN', { numeric: true, sensitivity: 'base' });
+  const collator = new Intl.Collator('en-US', { numeric: true, sensitivity: 'base' });
   const multiplier = direction === 'desc' ? -1 : 1;
   return [...employees].sort((a, b) => {
     let left = a[key];
@@ -75,21 +75,21 @@ export function validateEmployee(employee, employees, departments, currentId = n
   const rate = Number(employee.hourlyRate);
   const hireDate = String(employee.hireDate ?? '');
 
-  if (name.length < 2 || name.length > 30) errors.name = '姓名需为 2 至 30 个字符';
-  if (!/^MT\d{3}$/.test(employeeNo)) errors.employeeNo = '工号格式应为 MT001';
+  if (name.length < 2 || name.length > 30) errors.name = 'Name must be 2 to 30 characters';
+  if (!/^MT\d{3}$/.test(employeeNo)) errors.employeeNo = 'Employee ID must use the MT001 format';
   if (employees.some((item) => item.employeeNo === employeeNo && item.id !== currentId)) {
-    errors.employeeNo = '该工号已存在';
+    errors.employeeNo = 'This employee ID already exists';
   }
-  if (!/^1[3-9]\d{9}$/.test(phone)) errors.phone = '请输入 11 位手机号码';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = '请输入有效邮箱';
-  if (!departments.some((item) => item.id === employee.departmentId)) errors.departmentId = '请选择部门';
-  if (!String(employee.position ?? '').trim()) errors.position = '请填写岗位';
-  if (!String(employee.address ?? '').trim()) errors.address = '请填写住址';
-  if (!Number.isFinite(rate) || rate < 10 || rate > 500) errors.hourlyRate = '时薪应在 10 至 500 元之间';
+  if (!/^1[3-9]\d{9}$/.test(phone)) errors.phone = 'Enter an 11-digit mobile number';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = 'Enter a valid email address';
+  if (!departments.some((item) => item.id === employee.departmentId)) errors.departmentId = 'Select a department';
+  if (!String(employee.position ?? '').trim()) errors.position = 'Enter a position';
+  if (!String(employee.address ?? '').trim()) errors.address = 'Enter an address';
+  if (!Number.isFinite(rate) || rate < 10 || rate > 500) errors.hourlyRate = 'Hourly rate must be between CNY 10 and CNY 500';
   if (!/^\d{4}-\d{2}-\d{2}$/.test(hireDate) || Number.isNaN(parseDateKey(hireDate).getTime())) {
-    errors.hireDate = '请选择入职日期';
+    errors.hireDate = 'Select a hire date';
   }
-  if (!['active', 'leave', 'inactive'].includes(employee.status)) errors.status = '请选择状态';
+  if (!['active', 'leave', 'inactive'].includes(employee.status)) errors.status = 'Select a status';
 
   return { valid: Object.keys(errors).length === 0, errors };
 }
@@ -166,13 +166,13 @@ export function weekDates(weekStart) {
 
 export function formatDate(key, options = {}) {
   const date = key instanceof Date ? key : parseDateKey(key);
-  return new Intl.DateTimeFormat('zh-CN', {
+  return new Intl.DateTimeFormat('en-US', {
     month: 'short', day: 'numeric', ...options,
   }).format(date);
 }
 
 export function formatFullDate(date = new Date()) {
-  return new Intl.DateTimeFormat('zh-CN', {
+  return new Intl.DateTimeFormat('en-US', {
     year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',
   }).format(date);
 }
@@ -180,17 +180,17 @@ export function formatFullDate(date = new Date()) {
 export function formatWeekRange(weekStart) {
   const end = addDays(weekStart, 6);
   const sameMonth = weekStart.getMonth() === end.getMonth();
-  const startText = new Intl.DateTimeFormat('zh-CN', {
-    month: 'long', day: 'numeric',
+  const startText = new Intl.DateTimeFormat('en-US', {
+    month: 'short', day: 'numeric',
   }).format(weekStart);
-  const endText = new Intl.DateTimeFormat('zh-CN', sameMonth ? { day: 'numeric' } : {
-    month: 'long', day: 'numeric',
+  const endText = new Intl.DateTimeFormat('en-US', sameMonth ? { day: 'numeric' } : {
+    month: 'short', day: 'numeric',
   }).format(end);
-  return `${weekStart.getFullYear()}年${startText} - ${endText}`;
+  return `${startText} - ${endText}, ${end.getFullYear()}`;
 }
 
 export function formatCurrency(value) {
-  return new Intl.NumberFormat('zh-CN', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency', currency: 'CNY', maximumFractionDigits: 0,
   }).format(Number(value || 0));
 }
@@ -198,7 +198,7 @@ export function formatCurrency(value) {
 export function formatDateTime(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return '—';
-  return new Intl.DateTimeFormat('zh-CN', {
+  return new Intl.DateTimeFormat('en-US', {
     month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
   }).format(date);
 }
@@ -207,16 +207,17 @@ export function tenureText(hireDate, now = new Date()) {
   const start = parseDateKey(hireDate);
   let months = (now.getFullYear() - start.getFullYear()) * 12 + now.getMonth() - start.getMonth();
   if (now.getDate() < start.getDate()) months -= 1;
-  if (months < 1) return '不满 1 个月';
-  if (months < 12) return `${months} 个月`;
+  if (months < 1) return 'Less than 1 month';
+  if (months < 12) return `${months} month${months === 1 ? '' : 's'}`;
   const years = Math.floor(months / 12);
   const rest = months % 12;
-  return rest ? `${years} 年 ${rest} 个月` : `${years} 年`;
+  return rest ? `${years} year${years === 1 ? '' : 's'} ${rest} month${rest === 1 ? '' : 's'}` : `${years} year${years === 1 ? '' : 's'}`;
 }
 
 export function initials(name) {
-  const text = String(name ?? '').trim();
-  return text.slice(-2) || '员工';
+  const parts = String(name ?? '').trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return 'ST';
+  return parts.slice(0, 2).map((part) => part[0]).join('').toUpperCase();
 }
 
 export function escapeHtml(value) {
@@ -234,8 +235,8 @@ export function shiftMeta(period) {
 
 export function employeeStatus(status) {
   return {
-    active: { label: '在职', tone: 'green' },
-    leave: { label: '休假', tone: 'amber' },
-    inactive: { label: '离职', tone: 'gray' },
+    active: { label: 'Active', tone: 'green' },
+    leave: { label: 'On Leave', tone: 'amber' },
+    inactive: { label: 'Inactive', tone: 'gray' },
   }[status] ?? { label: status, tone: 'gray' };
 }

@@ -1,111 +1,111 @@
-# 系统设计与架构
+# System Design and Architecture
 
-## 1. 设计目标
+## 1. Design Goals
 
-- 在普通浏览器中直接运行，方便课堂演示和 GitHub Pages 部署。
-- 将员工、排班、统计、库存和权限集中在同一工作台。
-- 页面、纯业务函数和初始数据分离，便于后续替换为服务端接口。
-- 权限判断集中管理，不在页面中散落角色字符串比较。
+- Run directly in a standard browser for classroom demonstrations and GitHub Pages deployment.
+- Keep employees, scheduling, statistics, inventory, and access control in one workspace.
+- Separate pages, pure business functions, and initial data so the data layer can later be replaced by a server API.
+- Centralize permission checks instead of scattering role-name comparisons across page code.
 
-## 2. 运行结构
+## 2. Runtime Structure
 
 ```text
 index.html
   └─ assets/js/app.js
-       ├─ core.js     纯函数：日期、筛选、校验、统计、权限
-       ├─ data.js     初始演示数据
+       ├─ core.js     Pure functions: dates, filtering, validation, statistics, permissions
+       ├─ data.js     Initial demo data
        ├─ localStorage
        └─ sessionStorage
 ```
 
 ### `core.js`
 
-负责不依赖 DOM 的业务逻辑：
+Contains business logic that does not depend on the DOM:
 
-- 角色权限集合与 `can(role, permission)`
-- 员工搜索、筛选与排序
-- 员工表单校验
-- 班次冲突检测
-- 部门、状态、人力成本统计
-- 周视图日期计算和展示格式化
+- Role permission sets and `can(role, permission)`
+- Employee search, filtering, and sorting
+- Employee form validation
+- Shift conflict detection
+- Department, status, and labor-cost statistics
+- Weekly date calculations and display formatting
 
-这些函数可以在 Node.js 测试中直接调用。
+These functions can be called directly by Node.js tests.
 
 ### `data.js`
 
-包含部门、员工、账号、班次、出勤、库存、补货申请和操作记录初始数据。班次与出勤日期以当前周为基准生成，避免打开项目时显示过期排班。
+Contains initial departments, employees, accounts, shifts, attendance, inventory, restock requests, and activity records. Shift and attendance dates are generated from the current week so the project never opens with an expired schedule.
 
 ### `app.js`
 
-负责：
+Handles:
 
-- 登录和会话恢复
-- URL 路由与角色分流
-- 页面 HTML 渲染
-- 表单、筛选和弹窗交互
-- 本地数据持久化
-- 权限按钮显示与隐藏
-- 操作日志和提示消息
+- Sign-in and session restoration
+- URL routing and role-based entry
+- Page rendering
+- Form, filter, and dialog interactions
+- Local data persistence
+- Permission-based display of actions
+- Activity logging and user messages
 
-## 3. 数据模型
+## 3. Data Model
 
 ### Employee
 
 ```text
-id              唯一标识
-employeeNo      工号，格式 MT001
-name            姓名
-gender          性别
-phone           手机号码
-email           电子邮箱
-address         居住地址
-departmentId    所属部门
-position        岗位
-hourlyRate      时薪
-hireDate        入职日期
-status          active / leave / inactive
-emergencyContact 紧急联系人
-note            备注
+id                Unique identifier
+employeeNo        Employee ID in MT001 format
+name              Full name
+gender            Gender
+phone             Mobile number
+email             Email address
+address           Residential address
+departmentId      Department
+position          Position
+hourlyRate        Hourly rate
+hireDate          Hire date
+status            active / leave / inactive
+emergencyContact  Emergency contact
+note              Notes
 ```
 
 ### Shift
 
 ```text
-id          唯一标识
-employeeId  员工
-date        工作日期
+id          Unique identifier
+employeeId  Employee
+date        Work date
 period      morning / afternoon / evening
-station     岗位或区域
-note        备注
-createdAt   创建时间
-createdBy   创建账号
+station     Station or area
+note        Notes
+createdAt   Creation time
+createdBy   Creating account
 ```
 
-约束：同一员工同一天同一班次不能重复安排。休假和离职员工不能新增班次。
+Constraint: the same employee cannot be assigned to the same shift twice on one date. Employees on leave or inactive cannot receive new shifts.
 
 ### User
 
 ```text
-id           唯一标识
-username     登录账号
-displayName  显示名称
-role         hr / supervisor / employee
-employeeId   关联员工
-salt         密码盐
-passwordHash SHA-256(salt + password)
+id            Unique identifier
+username      Sign-in name
+displayName   Display name
+role          hr / supervisor / employee
+employeeId    Linked employee
+salt          Password salt
+passwordHash  SHA-256(salt + password)
 ```
 
-### 其他实体
+### Other Entities
 
-- `Department`：部门名称、颜色、负责主管、说明。
-- `Attendance`：日期、签到、签退、状态。
-- `InventoryItem`：SKU、名称、分类、当前库存、安全库存、货架。
-- `RestockRequest`：申请商品、数量、申请人、状态和备注。
-- `AuditLog`：操作账号、实体、摘要和时间。
+- `Department`: name, color, manager, and description.
+- `Attendance`: date, check-in, check-out, and status.
+- `InventoryItem`: SKU, name, category, on-hand stock, safety stock, and shelf.
+- `RestockRequest`: product, quantity, requester, status, and notes.
+- `AuditLog`: account, entity, summary, and time.
 
-## 4. 权限设计
+## 4. Permission Design
 
-权限由 `PERMISSIONS` 集合统一维护：
+Permissions are maintained in the `PERMISSIONS` collection:
 
 ```text
 HR:
@@ -131,47 +131,47 @@ Ordinary Employee:
   schedule:self
 ```
 
-页面入口通过 `canVisit()` 二次校验，避免仅隐藏导航但仍可通过 URL 访问。普通员工的数据查询只使用当前账号关联的 `employeeId`。
+Page entry is checked again through `canVisit()` so a hidden navigation item cannot be accessed by typing a URL. Queries for Ordinary Employees use only the `employeeId` linked to the current account.
 
-## 5. 会话与密码
+## 5. Session and Password Handling
 
-- 登录密码使用 Web Crypto SHA-256，以账号独立盐值计算摘要。
-- 登录会话写入 `sessionStorage`，有效期 8 小时。
-- 错误登录统一显示“账号或密码不正确”，不区分账号不存在和密码错误。
-- 当前演示版不保存明文密码，但静态前端仍不能替代服务端安全边界。
+- Passwords use Web Crypto SHA-256 with an account-specific salt.
+- The sign-in session is stored in `sessionStorage` and expires after eight hours.
+- Failed sign-in attempts return one generic “Incorrect username or password” message.
+- The demo never stores plaintext passwords, but a static front end cannot replace a server-side security boundary.
 
-## 6. 页面结构
+## 6. Page Structure
 
-| 页面 | HR | Supervisor | Ordinary Employee |
+| Page | HR | Supervisor | Ordinary Employee |
 | --- | --- | --- | --- |
-| 门店概览 | 是 | 是 | 否 |
-| 员工档案/查询 | 完整管理 | 只读查询 | 否 |
-| 部门概览 | 是 | 是 | 否 |
-| 班次 | 只读 | 管理与自动补齐 | 仅本人 |
-| 人员统计 | 是 | 是 | 否 |
-| 库存 | 从概览可进入查看 | 是 | 否 |
-| 角色与权限 | 是 | 否 | 否 |
-| 操作记录 | 是 | 是 | 否 |
-| 我的资料 | 否 | 否 | 是 |
-| 我的班次 | 否 | 否 | 是 |
+| Store Overview | Yes | Yes | No |
+| Employee Records / Directory | Full management | Read-only search | No |
+| Departments | Yes | Yes | No |
+| Scheduling | Read-only | Management and auto-fill | Own shifts only |
+| Statistics | Yes | Yes | No |
+| Inventory | Available from the overview | Yes | No |
+| Roles & Access | Yes | No | No |
+| Activity Log | Yes | Yes | No |
+| My Profile | No | No | Yes |
+| My Shifts | No | No | Yes |
 
-## 7. 生产环境迁移建议
+## 7. Production Migration Guidance
 
-当前版本是静态演示系统。真实门店使用时，建议按以下顺序迁移：
+The current version is a static demonstration system. A production store deployment should migrate in this order:
 
-1. 保留 `core.js` 的校验与统计规则，将数据访问改为 REST API。
-2. 服务端采用 Node.js、Java 或 Python 均可，数据库建议 PostgreSQL 或 MySQL。
-3. 密码使用 Argon2id 或 bcrypt 加盐哈希，登录成功后签发 HttpOnly、Secure、SameSite Cookie。
-4. 每个 API 都在服务端重新校验角色，不依赖前端隐藏按钮。
-5. 员工删除采用软删除，保留审计与历史班次关联。
-6. 排班新增使用数据库唯一约束防止并发重复分配。
-7. 统计查询增加日期与部门索引，列表接口增加分页。
-8. 敏感操作写入不可篡改审计表，并设置定期备份。
+1. Keep the validation and statistics rules in `core.js` and replace data access with a REST API.
+2. Use Node.js, Java, or Python on the server. PostgreSQL or MySQL is recommended for persistence.
+3. Hash passwords with Argon2id or bcrypt. After sign-in, issue an HttpOnly, Secure, SameSite cookie.
+4. Enforce role checks on every API endpoint; never rely on hidden front-end buttons.
+5. Soft-delete employees to preserve audit history and shift relationships.
+6. Add a database uniqueness constraint for shift assignments to prevent concurrent duplicates.
+7. Add date and department indexes for statistics and pagination for list endpoints.
+8. Write sensitive actions to a tamper-resistant audit table and schedule regular backups.
 
-## 8. 性能考虑
+## 8. Performance Considerations
 
-- 当前数据量较小，筛选和统计在浏览器内存中完成。
-- 静态资源不使用外部 CDN 或网络字体，首次加载后无需第三方请求。
-- 页面切换只重绘对应区域，不刷新浏览器。
-- 图表使用 CSS 和原生 SVG，不引入大型图表库。
-- 响应式布局在 1180、920、720 和 430 像素设置断点。
+- Current data volumes are small, so filtering and statistics run in browser memory.
+- Static assets use no external CDN or web fonts, so the first load creates no third-party requests.
+- Page changes redraw only the relevant content instead of reloading the browser.
+- Charts use CSS and native SVG without a large charting library.
+- Responsive breakpoints are set at 1180, 920, 720, and 430 pixels.

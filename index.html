@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="梅提商城员工管理系统，覆盖员工档案、工作班次、门店统计与库存查看。">
+  <meta name="description" content="Meiti Mall employee management system for employee records, shift scheduling, store statistics, and inventory visibility.">
   <meta name="theme-color" content="#1f4d3a">
-  <title>梅提商城 · 员工管理系统</title>
+  <title>Meiti Mall · Employee Management</title>
   <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#mainContent">跳到主要内容</a>
+  <a class="skip-link" href="#mainContent">Skip to main content</a>
 
   <section class="login-view" id="loginView">
     <div class="login-visual" aria-hidden="true">
@@ -19,17 +19,17 @@
         <img src="assets/images/logo-mark.svg" alt="" width="48" height="48">
         <div>
           <span class="login-brand__en">MEITI</span>
-          <span class="login-brand__cn">梅提商城</span>
+          <span class="login-brand__cn">Meiti Mall</span>
         </div>
       </div>
       <div class="login-copy">
         <p class="eyebrow">MEITI STORE OPERATIONS</p>
-        <h1>把人员与班次，<br>安排得明明白白。</h1>
-        <p>员工档案、排班、门店统计集中在一个工作台。不同岗位按权限处理各自事务，减少重复登记和口头确认。</p>
+        <h1>People and shifts,<br>clearly organized.</h1>
+        <p>Keep employee records, scheduling, and store statistics in one workspace. Each role handles the work it needs without duplicate entries or verbal confirmations.</p>
         <div class="login-metrics">
-          <div><strong>3</strong><span>岗位角色</span></div>
-          <div><strong>3</strong><span>每日班次</span></div>
-          <div><strong>1</strong><span>门店视图</span></div>
+          <div><strong>3</strong><span>Role types</span></div>
+          <div><strong>3</strong><span>Daily shifts</span></div>
+          <div><strong>1</strong><span>Store view</span></div>
         </div>
       </div>
       <div class="store-illustration" aria-hidden="true">
@@ -38,62 +38,62 @@
         <div class="store-illustration__window"><i></i><i></i><i></i></div>
         <div class="store-illustration__door"></div>
       </div>
-      <p class="login-footnote">郑州首店 · 内部管理系统</p>
+      <p class="login-footnote">Zhengzhou Flagship Store · Internal management system</p>
     </div>
 
     <div class="login-panel">
       <div class="login-panel__inner">
         <div class="mobile-brand">
           <img src="assets/images/logo-mark.svg" alt="" width="42" height="42">
-          <span>梅提商城</span>
+          <span>Meiti Mall</span>
         </div>
         <p class="eyebrow">EMPLOYEE MANAGEMENT</p>
-        <h2>登录工作台</h2>
-        <p class="login-intro">使用门店账号进入系统，页面会按角色显示可操作的内容。</p>
+        <h2>Sign in to your workspace</h2>
+        <p class="login-intro">Use your store account to sign in. The workspace will show the tools available to your role.</p>
 
         <form id="loginForm" class="login-form" novalidate>
           <label class="field">
-            <span class="field__label">账号</span>
+            <span class="field__label">Username</span>
             <span class="input-shell">
               <span class="input-icon" data-icon="user"></span>
-              <input id="username" name="username" type="text" autocomplete="username" placeholder="例如 hr.wang" required>
+              <input id="username" name="username" type="text" autocomplete="username" placeholder="For example, hr.wang" required>
             </span>
           </label>
           <label class="field">
-            <span class="field__label">密码</span>
+            <span class="field__label">Password</span>
             <span class="input-shell">
               <span class="input-icon" data-icon="lock"></span>
-              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" required>
-              <button class="icon-button input-action" id="togglePassword" type="button" aria-label="显示密码" title="显示密码"></button>
+              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+              <button class="icon-button input-action" id="togglePassword" type="button" aria-label="Show password" title="Show password"></button>
             </span>
           </label>
           <div class="form-message" id="loginMessage" role="alert"></div>
           <button class="button button--primary button--wide" id="loginButton" type="submit">
-            <span>进入系统</span>
+            <span>Sign in</span>
             <span class="button__arrow">→</span>
           </button>
         </form>
 
         <div class="demo-section">
-          <div class="section-divider"><span>演示账号</span></div>
+          <div class="section-divider"><span>Demo accounts</span></div>
           <div class="demo-accounts">
             <button class="demo-account" type="button" data-demo-account="hr">
               <span class="demo-account__icon demo-account__icon--green" data-icon="briefcase"></span>
-              <span><strong>HR</strong><small>员工档案管理</small></span>
-              <span class="demo-account__fill">填入</span>
+              <span><strong>HR</strong><small>Employee records</small></span>
+              <span class="demo-account__fill">Use</span>
             </button>
             <button class="demo-account" type="button" data-demo-account="supervisor">
               <span class="demo-account__icon demo-account__icon--amber" data-icon="calendar"></span>
-              <span><strong>Supervisor</strong><small>排班与门店查看</small></span>
-              <span class="demo-account__fill">填入</span>
+              <span><strong>Supervisor</strong><small>Scheduling and store view</small></span>
+              <span class="demo-account__fill">Use</span>
             </button>
             <button class="demo-account" type="button" data-demo-account="employee">
               <span class="demo-account__icon demo-account__icon--blue" data-icon="badge"></span>
-              <span><strong>Ordinary Employee</strong><small>本人资料与班次</small></span>
-              <span class="demo-account__fill">填入</span>
+              <span><strong>Ordinary Employee</strong><small>Own profile and shifts</small></span>
+              <span class="demo-account__fill">Use</span>
             </button>
           </div>
-          <p class="login-hint">账号信息仅用于本地演示，数据保存在当前浏览器。</p>
+          <p class="login-hint">Demo credentials are for local use. Data stays in this browser.</p>
         </div>
       </div>
     </div>
@@ -105,17 +105,17 @@
       <div class="sidebar__brand">
         <img src="assets/images/logo-mark.svg" alt="" width="40" height="40">
         <div>
-          <strong>梅提商城</strong>
-          <span>员工管理系统</span>
+          <strong>Meiti Mall</strong>
+          <span>Employee Management</span>
         </div>
       </div>
 
-      <nav class="sidebar__nav" id="sideNav" aria-label="主导航"></nav>
+      <nav class="sidebar__nav" id="sideNav" aria-label="Main navigation"></nav>
 
       <div class="sidebar__footer">
         <div class="store-status">
           <span class="store-status__dot"></span>
-          <div><strong>郑州首店</strong><small>系统运行正常</small></div>
+          <div><strong>Zhengzhou Flagship Store</strong><small>System running normally</small></div>
         </div>
         <button class="sidebar__user" id="sidebarUser" type="button" data-action="open-user-menu" aria-expanded="false">
           <span class="avatar avatar--small" id="sidebarAvatar"></span>
@@ -126,8 +126,8 @@
           <span data-icon="more"></span>
         </button>
         <div class="user-popover" id="userPopover" hidden>
-          <button type="button" data-action="reset-data"><span data-icon="refresh"></span>重置演示数据</button>
-          <button type="button" data-action="logout"><span data-icon="logout"></span>退出登录</button>
+          <button type="button" data-action="reset-data"><span data-icon="refresh"></span>Reset demo data</button>
+          <button type="button" data-action="logout"><span data-icon="logout"></span>Sign out</button>
         </div>
       </div>
     </aside>
@@ -135,18 +135,18 @@
     <div class="app-main">
       <header class="topbar">
         <div class="topbar__left">
-          <button class="icon-button mobile-menu-button" id="menuButton" type="button" aria-label="打开导航">
+          <button class="icon-button mobile-menu-button" id="menuButton" type="button" aria-label="Open navigation">
             <span data-icon="menu"></span>
           </button>
           <div>
-            <p class="topbar__eyebrow" id="pageEyebrow">工作台</p>
-            <h1 id="pageTitle">门店概览</h1>
+            <p class="topbar__eyebrow" id="pageEyebrow">Workspace</p>
+            <h1 id="pageTitle">Store Overview</h1>
           </div>
         </div>
         <div class="topbar__right">
           <span class="today-label" id="todayLabel"></span>
           <div class="role-pill" id="rolePill"></div>
-          <button class="icon-button notification-button" type="button" aria-label="待处理事项" data-action="show-notifications">
+          <button class="icon-button notification-button" type="button" aria-label="Pending items" data-action="show-notifications">
             <span data-icon="bell"></span>
             <i id="notificationDot"></i>
           </button>
@@ -161,7 +161,7 @@
   <div class="toast-root" id="toastRoot" aria-live="polite"></div>
 
   <noscript>
-    <div class="noscript">此系统需要启用 JavaScript 才能运行。</div>
+    <div class="noscript">JavaScript must be enabled to use this system.</div>
   </noscript>
   <script type="module" src="assets/js/app.js"></script>
 </body>

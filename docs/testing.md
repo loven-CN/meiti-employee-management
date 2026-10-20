@@ -1,25 +1,25 @@
-# 测试计划与验收记录
+# Test Plan and Acceptance Results
 
-## 1. 测试范围
+## 1. Scope
 
-- 登录、会话恢复与退出
-- 角色导航和按钮权限
-- 员工新增、编辑、删除、搜索、筛选、详情和导出
-- 班次分配、重复班次拦截、周切换和智能补齐
-- 人员统计、部门概览、库存和补货申请
-- 普通员工本人资料与本人班次
-- 不同屏幕宽度下的布局
+- Sign-in, session restoration, and sign-out
+- Role-based navigation and action permissions
+- Employee creation, editing, deletion, search, filtering, details, and export
+- Shift assignment, duplicate-shift prevention, week navigation, and auto-fill
+- Statistics, departments, inventory, and restock requests
+- Ordinary Employee profile and own-shift views
+- Layout at multiple viewport widths
 
-## 2. 自动化测试
+## 2. Automated Tests
 
-运行命令：
+Run:
 
 ```bash
 npm test
 npm run check
 ```
 
-最近一次本地结果：
+Latest local result:
 
 ```text
 tests 10
@@ -27,49 +27,50 @@ pass 10
 fail 0
 ```
 
-覆盖内容：
+Coverage:
 
-- HR、Supervisor、Ordinary Employee 权限差异
-- 姓名、工号、岗位搜索
-- 部门、状态与关键字组合筛选
-- 姓名与时薪排序
-- 员工必填项、工号唯一性、手机、邮箱与时薪校验
-- 同员工同日同班次冲突
-- 员工状态与部门统计
-- 周一作为每周第一天
-- 三个班次名称与时间
-- 货币和在职时长格式
+- Permission differences across HR, Supervisor, and Ordinary Employee
+- Name, employee ID, and position search
+- Combined department, status, and keyword filters
+- Sorting by name and hourly rate
+- Required fields, employee ID uniqueness, phone, email, and hourly-rate validation
+- Duplicate shift prevention for the same employee, date, and shift
+- Employee status and department statistics
+- Monday as the first day of the week
+- Shift names and times
+- Currency and tenure formatting
 
-## 3. 浏览器验收
+## 3. Browser Acceptance
 
-| 用例 | 操作 | 预期 | 结果 |
+| Case | Action | Expected result | Result |
 | --- | --- | --- | --- |
-| HR 登录 | 点击 HR 演示账号并登录 | 进入门店概览，显示 7 个导航入口 | 通过 |
-| 员工搜索 | 输入“陈思远” | 列表只显示陈思远 | 通过 |
-| 新增员工 | 填写合法档案并保存 | 列表从 16 人变为 17 人，出现成功提示 | 通过 |
-| HR 只读排班 | 打开班次查看 | 显示周视图，不显示分配按钮 | 通过 |
-| Supervisor 登录 | 切换主管账号 | 导航显示员工查询、排班、统计、库存和记录 | 通过 |
-| Supervisor 员工只读 | 打开员工查询 | 无添加、编辑、删除按钮 | 通过 |
-| 分配班次 | 选择员工、日期和班次并保存 | 周视图新增班次，人数汇总更新 | 通过 |
-| 智能补齐 | 打开智能补齐确认框 | 显示当前周缺口数量和建议规则 | 通过 |
-| 统计页面 | 打开人员统计 | 显示状态占比、部门分布与班次覆盖 | 通过 |
-| 库存页面 | 打开库存查看 | 显示 8 项库存和 5 条补货申请 | 通过 |
-| 普通员工登录 | 切换员工账号 | 只显示“我的资料”和“我的班次” | 通过 |
-| 本人班次 | 打开我的班次 | 只显示当前员工的一周班次 | 通过 |
-| 控制台错误 | 检查浏览器日志 | 无错误和警告 | 通过 |
+| HR sign-in | Select the HR demo account and sign in | Store Overview opens with seven navigation entries | Passed |
+| Employee search | Enter “Siyuan Chen” | Only Siyuan Chen remains in the list | Passed |
+| Add employee | Complete a valid record and save | List grows from 16 to 17 employees and a success message appears | Passed |
+| HR read-only scheduling | Open Shift View | Weekly view appears without assignment controls | Passed |
+| Supervisor sign-in | Switch to the supervisor account | Navigation includes Employee Directory, Scheduling, Statistics, Inventory, and Activity Log | Passed |
+| Supervisor read-only employees | Open Employee Directory | Add, edit, and delete controls are absent | Passed |
+| Assign shift | Select an employee, date, and shift, then save | Weekly view adds the shift and totals update | Passed |
+| Auto-fill | Open the auto-fill confirmation | The current weekly gap count and scheduling rules are shown | Passed |
+| Statistics | Open Statistics | Status share, department distribution, and shift coverage appear | Passed |
+| Inventory | Open Inventory | Eight inventory items and five restock requests appear | Passed |
+| Ordinary Employee sign-in | Switch to the employee account | Only My Profile and My Shifts appear | Passed |
+| Own shifts | Open My Shifts | Only the current employee's weekly shifts appear | Passed |
+| Language check | Inspect all pages and dialogs | No Chinese characters remain in the rendered interface | Passed |
+| Console errors | Inspect browser logs | No errors or warnings | Passed |
 
-## 4. 响应式检查
+## 4. Responsive Checks
 
-CSS 断点：
+CSS breakpoints:
 
-- 1180px：KPI 两列，统计页折行
-- 920px：侧栏变为抽屉，顶部显示菜单按钮
-- 720px：工具栏、表单与统计图改为单列或两列
-- 430px：KPI 与本人班次改为单列
+- 1180px: KPIs become two columns; statistics cards wrap.
+- 920px: the sidebar becomes a drawer and the menu button appears.
+- 720px: toolbars, forms, and statistics grids become one or two columns.
+- 430px: KPIs and personal shifts become a single column.
 
-## 5. 未覆盖项
+## 5. Not Covered
 
-- 真实服务端并发、数据库事务和网络错误恢复
-- 真实门店账号体系、单点登录和密码找回
-- 大批量员工数据的分页性能
-- Safari 旧版本兼容性
+- Real server concurrency, database transactions, and network failure recovery
+- Real store account integration, single sign-on, and password recovery
+- Pagination performance with large employee datasets
+- Legacy Safari compatibility

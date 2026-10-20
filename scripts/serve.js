@@ -38,5 +38,5 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, () => {
-  console.log(`梅提商城员工管理系统：http://localhost:${port}`);
+  console.log(`Meiti Mall Employee Management: http://localhost:${port}`);
 });

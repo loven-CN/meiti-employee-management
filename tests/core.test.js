@@ -9,7 +9,7 @@ import {
 
 const db = createSeedData();
 
-test('角色权限按 HR、Supervisor、普通员工隔离', () => {
+test('role permissions are isolated across HR, Supervisor, and Ordinary Employee', () => {
   assert.equal(can('hr', 'employee:delete'), true);
   assert.equal(can('hr', 'schedule:create'), false);
   assert.equal(can('supervisor', 'employee:read'), true);
@@ -19,22 +19,22 @@ test('角色权限按 HR、Supervisor、普通员工隔离', () => {
   assert.equal(can('employee', 'profile:self'), true);
 });
 
-test('员工搜索支持姓名、工号和岗位', () => {
-  assert.equal(filterEmployees(db.employees, { query: '陈思远' }).length, 1);
-  assert.equal(filterEmployees(db.employees, { query: 'MT005' })[0].name, '孙浩');
-  assert.equal(filterEmployees(db.employees, { query: '收银员' }).length >= 3, true);
+test('employee search supports name, employee ID, and position', () => {
+  assert.equal(filterEmployees(db.employees, { query: 'Siyuan Chen' }).length, 1);
+  assert.equal(filterEmployees(db.employees, { query: 'MT005' })[0].name, 'Hao Sun');
+  assert.equal(filterEmployees(db.employees, { query: 'Cashier' }).length >= 3, true);
 });
 
-test('员工筛选条件可以组合使用', () => {
+test('employee filters can be combined', () => {
   const result = filterEmployees(db.employees, {
-    departmentId: 'd2', status: 'active', query: '理货员',
+    departmentId: 'd2', status: 'active', query: 'Stock Associate',
   });
   assert.equal(result.every((employee) => employee.departmentId === 'd2'), true);
   assert.equal(result.every((employee) => employee.status === 'active'), true);
-  assert.equal(result.some((employee) => employee.name === '赵一凡'), true);
+  assert.equal(result.some((employee) => employee.name === 'Yifan Zhao'), true);
 });
 
-test('员工排序支持姓名与时薪', () => {
+test('employee sorting supports name and hourly rate', () => {
   const byRate = sortEmployees(db.employees, 'hourlyRate', 'desc');
   assert.equal(byRate[0].hourlyRate >= byRate[1].hourlyRate, true);
   const byName = sortEmployees(db.employees.slice(0, 4), 'name', 'asc');
@@ -42,9 +42,9 @@ test('员工排序支持姓名与时薪', () => {
   assert.equal(new Set(byName.map((item) => item.id)).size, 4);
 });
 
-test('员工表单校验能拦截重复工号与错误联系方式', () => {
+test('employee validation blocks duplicate IDs and invalid contact details', () => {
   const candidate = {
-    ...db.employees[0], name: '测试员工', phone: '123', email: 'bad-email', hourlyRate: 5,
+    ...db.employees[0], name: 'Test Employee', phone: '123', email: 'bad-email', hourlyRate: 5,
   };
   const result = validateEmployee(candidate, db.employees, db.departments);
   assert.equal(result.valid, false);
@@ -54,16 +54,16 @@ test('员工表单校验能拦截重复工号与错误联系方式', () => {
   assert.ok(result.errors.hourlyRate);
 });
 
-test('员工表单校验接受合法的新档案', () => {
+test('employee validation accepts a valid new record', () => {
   const result = validateEmployee({
-    employeeNo: 'MT099', name: '测试员工', phone: '13800138000',
-    email: 'staff@meiti.example', address: '郑州市测试路 1 号', departmentId: 'd1',
-    position: '理货员', hourlyRate: 26, hireDate: '2026-10-19', status: 'active',
+    employeeNo: 'MT099', name: 'Test Employee', phone: '13800138000',
+    email: 'staff@meiti.example', address: '1 Test Road, Zhengzhou', departmentId: 'd1',
+    position: 'Stock Associate', hourlyRate: 26, hireDate: '2026-10-19', status: 'active',
   }, db.employees, db.departments);
   assert.equal(result.valid, true);
 });
 
-test('同一员工同一天同一班次不能重复分配', () => {
+test('the same employee cannot be assigned to the same shift twice in one day', () => {
   const existing = db.shifts[0];
   assert.equal(hasShiftConflict(db.shifts, {
     employeeId: existing.employeeId, date: existing.date, period: existing.period,
@@ -73,7 +73,7 @@ test('同一员工同一天同一班次不能重复分配', () => {
   }), false);
 });
 
-test('统计数据正确汇总总数、状态和部门', () => {
+test('statistics correctly aggregate totals, statuses, and departments', () => {
   const stats = computeStats(db.employees, db.departments, db.shifts);
   assert.equal(stats.total, db.employees.length);
   assert.equal(stats.active + stats.leave + stats.inactive, stats.total);
@@ -81,7 +81,7 @@ test('统计数据正确汇总总数、状态和部门', () => {
   assert.equal(stats.weeklyShifts, db.shifts.length);
 });
 
-test('周视图从周一开始并包含七天', () => {
+test('the weekly view starts on Monday and contains seven days', () => {
   const start = getWeekStart('2026-10-19');
   assert.equal(dateKey(start), '2026-10-19');
   const days = weekDates(start);
@@ -91,10 +91,10 @@ test('周视图从周一开始并包含七天', () => {
   assert.equal(dateKey(addDays(start, 7)), '2026-10-26');
 });
 
-test('班次时段与展示辅助函数保持一致', () => {
-  assert.equal(shiftMeta('morning').name, '上午班');
+test('shift labels and display helpers remain consistent', () => {
+  assert.equal(shiftMeta('morning').name, 'Morning');
   assert.equal(shiftMeta('afternoon').time, '14:00 - 20:00');
-  assert.equal(shiftMeta('evening').name, '晚班');
-  assert.equal(formatCurrency(28), '¥28');
-  assert.match(tenureText('2025-01-01', new Date(2026, 0, 1)), /1 年/);
+  assert.equal(shiftMeta('evening').name, 'Evening');
+  assert.equal(formatCurrency(28), 'CN¥28');
+  assert.match(tenureText('2025-01-01', new Date(2026, 0, 1)), /1 year/);
 });

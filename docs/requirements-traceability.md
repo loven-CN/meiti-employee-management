@@ -1,66 +1,66 @@
-# 需求追踪表
+# Requirements Traceability
 
-## 1. 角色与术语
+## 1. Roles and Terminology
 
-| 统一角色 | 页面入口 | 权限摘要 |
+| Role | Entry points | Permission summary |
 | --- | --- | --- |
-| HR | 员工档案、部门概览、班次查看、人员统计、角色与权限、操作记录 | 员工档案增删改查；查看排班；查看统计；调整其他账号角色 |
-| Supervisor | 员工查询、排班管理、人员统计、库存查看、操作记录 | 查询员工；分配和删除班次；智能补齐；查看库存与补货申请 |
-| Ordinary Employee | 我的资料、我的班次 | 仅查看本人档案与本人班次 |
+| HR | Employee Records, Departments, Shift View, Statistics, Roles & Access, Activity Log | Employee record CRUD; schedule viewing; statistics; role changes for other accounts |
+| Supervisor | Employee Directory, Scheduling, Statistics, Inventory, Activity Log | Employee search; shift assignment and deletion; auto-fill; inventory and restock viewing |
+| Ordinary Employee | My Profile, My Shifts | View only own employee record and own shifts |
 
-系统内不使用 Administrator、Admin 或模糊的“管理员”角色。登录前用户统称 User，登录后使用完整角色名称。
+The system does not use Administrator, Admin, or an ambiguous “manager” role. Unauthenticated users are called User; signed-in users are identified by the full role name.
 
-## 2. 功能需求
+## 2. Functional Requirements
 
-| 编号 | 需求 | 实现位置 | 状态 |
+| ID | Requirement | Implementation | Status |
 | --- | --- | --- | --- |
-| FR-01 | HR 添加员工 | 员工档案 → 添加员工；`openEmployeeForm` / `handleEmployeeSubmit` | 已实现 |
-| FR-02 | HR 删除员工 | 员工列表 → 删除；`requestDeleteEmployee` | 已实现 |
-| FR-03 | 查看员工列表 | 员工档案表格 | 已实现 |
-| FR-04 | 搜索员工并查看详情 | 搜索框、部门/状态筛选、员工详情抽屉 | 已实现 |
-| FR-05 | 修改员工信息 | 员工列表 → 编辑；`handleEmployeeSubmit` | 已实现 |
-| FR-06 | 将员工分配到部门 | 员工表单中的“所属部门” | 已实现 |
-| FR-07 | 查看员工考勤记录 | 员工详情与“我的资料”中的近期出勤 | 已实现，记录只读 |
-| FR-08 | 员工统计数据 | 人员统计页面 | 已实现 |
-| FR-09 | 手动分配工作班次 | 排班管理 → 分配班次；`openShiftForm` | 已实现 |
-| FR-10 | 每天三个班次 | 上午班、下午班、晚班 | 已实现 |
-| FR-11 | 按员工查看班次 | 排班页员工筛选；Ordinary Employee 班次页 | 已实现 |
-| FR-12 | 按整店查看班次 | 排班管理周视图 | 已实现 |
-| FR-13 | 自动排班（Could） | 排班管理 → 智能补齐；`buildAutoScheduleSuggestions` | 已实现基础建议 |
-| FR-14 | Supervisor 查看库存 | 库存查看页 | 已实现 |
-| FR-15 | 查看货架补货请求 | 库存页右侧补货申请列表 | 已实现 |
-| FR-16 | 管理产品库存（Could） | 本期保持只读；仓储数据由外部系统维护 | 范围外 |
-| FR-17 | 区分三种角色 | `ROLE_META` 与 `PERMISSIONS` | 已实现 |
-| FR-18 | 按角色限制页面与数据 | `can()`、`canVisit()`、页面按钮条件渲染 | 已实现 |
-| FR-19 | HR 管理员工，Supervisor 管理班次 | 角色权限矩阵 | 已实现 |
-| FR-20 | Supervisor 查看统计与员工信息 | 人员统计、员工查询 | 已实现 |
-| FR-21 | 查看库存与补货 | 库存查看页 | 已实现 |
-| FR-22 | 员工登录调整个人信息 | 原需求为 Won't；演示版提供本人资料只读查看 | 范围外，仅只读 |
-| FR-23 | 员工查看本人班次 | 我的班次页 | 已实现 |
-| FR-24 | 店内考勤登记 | 仅展示演示出勤记录 | 范围外 |
-| FR-25 | 新增部门与部门管理 | 部门为固定演示数据，通过员工档案完成分配 | 范围外 |
-| FR-26 | 完整产品管理系统 | 仅库存查看与补货申请 | 范围外 |
+| FR-01 | HR adds employees | Employee Records → Add Employee; `openEmployeeForm` / `handleEmployeeSubmit` | Implemented |
+| FR-02 | HR deletes employees | Employee list → Delete; `requestDeleteEmployee` | Implemented |
+| FR-03 | View employee list | Employee Records table | Implemented |
+| FR-04 | Search employees and view details | Search, department/status filters, employee detail drawer | Implemented |
+| FR-05 | Edit employee information | Employee list → Edit; `handleEmployeeSubmit` | Implemented |
+| FR-06 | Assign employees to departments | Department field in the employee form | Implemented |
+| FR-07 | View employee attendance | Recent attendance in Employee Details and My Profile | Implemented as read-only |
+| FR-08 | Employee statistics | Statistics page | Implemented |
+| FR-09 | Manually assign shifts | Scheduling → Assign Shift; `openShiftForm` | Implemented |
+| FR-10 | Three daily shifts | Morning, Afternoon, Evening | Implemented |
+| FR-11 | View shifts by employee | Employee filter on Scheduling; Ordinary Employee My Shifts | Implemented |
+| FR-12 | View all store shifts | Scheduling weekly view | Implemented |
+| FR-13 | Auto-scheduling (Could) | Scheduling → Auto-Fill; `buildAutoScheduleSuggestions` | Basic suggestions implemented |
+| FR-14 | Supervisor views inventory | Inventory page | Implemented |
+| FR-15 | View shelf restock requests | Restock request list on Inventory | Implemented |
+| FR-16 | Manage product inventory (Could) | Read-only in this release; warehouse data is maintained externally | Out of scope |
+| FR-17 | Distinguish three roles | `ROLE_META` and `PERMISSIONS` | Implemented |
+| FR-18 | Restrict pages and data by role | `can()`, `canVisit()`, conditional page actions | Implemented |
+| FR-19 | HR manages employees; Supervisor manages shifts | Role permission matrix | Implemented |
+| FR-20 | Supervisor views statistics and employee information | Statistics and Employee Directory | Implemented |
+| FR-21 | View inventory and restocks | Inventory page | Implemented |
+| FR-22 | Employees sign in and adjust personal information | Original requirement was Won't; demo provides read-only own-profile access | Out of scope; read-only only |
+| FR-23 | Employees view own shifts | My Shifts page | Implemented |
+| FR-24 | In-store attendance registration | Demo attendance records are displayed only | Out of scope |
+| FR-25 | Add and manage departments | Departments are fixed demo data; assignment happens through employee records | Out of scope |
+| FR-26 | Full product management system | Inventory and restock viewing only | Out of scope |
 
-## 3. 非功能需求
+## 3. Non-functional Requirements
 
-| 编号 | 要求 | 当前实现 | 生产化建议 |
+| ID | Requirement | Current implementation | Production recommendation |
 | --- | --- | --- | --- |
-| NFR-01 | 界面友好 | 中文字体、角色化导航、空状态、确认对话框、响应式布局 | 继续补充真实用户测试 |
-| NFR-02 | 数据安全与隐私 | 密码摘要校验、会话过期、角色校验、敏感字段不明文展示 | 改为服务端鉴权、HTTPS、数据库加密与访问审计 |
-| NFR-03 | 响应不超过 2 秒 | 零运行时依赖，静态资源本地加载，列表直接内存筛选 | 接入 API 后增加索引、分页和缓存 |
-| NFR-04 | 多用户同时访问 | GitHub Pages 可承载静态访问；演示数据为单浏览器本地存储 | 接入服务端数据库和并发控制 |
-| NFR-05 | 可扩展 | 数据、纯函数和视图分层；角色权限集中配置 | 将 `data.js` 替换为 API 客户端 |
-| NFR-06 | Git 版本控制 | 使用 Git，仓库包含提交记录和 Actions | 保持小步提交和变更说明 |
+| NFR-01 | Friendly interface | English UI, role-based navigation, empty states, confirmation dialogs, responsive layout | Continue with real user testing |
+| NFR-02 | Data security and privacy | Password digest verification, session expiry, role checks, no plaintext credential display | Move to server authentication, HTTPS, database encryption, and access auditing |
+| NFR-03 | Response under two seconds | Zero runtime dependencies, local static assets, in-memory list filtering | Add indexes, pagination, and caching after API integration |
+| NFR-04 | Multiple concurrent users | GitHub Pages supports static access; demo data is stored per browser | Add a server database and concurrency controls |
+| NFR-05 | Extensibility | Data, pure functions, and views are separated; permissions are centralized | Replace `data.js` with an API client |
+| NFR-06 | Git version control | Git repository, clear commits, and GitHub Actions | Continue small, focused commits and change notes |
 
-## 4. 代码检查清单
+## 4. Code Review Checklist
 
-- 用例覆盖新增、删除、编辑、查询员工档案与排班模块。
-- 角色使用 HR、Supervisor、Ordinary Employee，不使用 Administrator。
-- 登录后进入 System Home Page，再按角色分流。
-- HR 与 Supervisor 可以查询员工；只有 HR 可以删除员工。
-- HR 负责人事档案，Supervisor 负责排班。
-- 详细用例包含 Precondition、Trigger、Main Scenario 和 Extensions。
-- Extensions 使用 `1A`、`1B` 等编号。
-- Search Employee 与 Filter by Employee 通过包含关系复用。
-- 全文统一角色术语。
-- `docs/use-cases.md` 末尾包含 System Overall Overview。
+- Use cases cover add, delete, edit, and search for employee records and shift modules.
+- Roles use HR, Supervisor, and Ordinary Employee; Administrator is not used.
+- Sign-in leads to the System Home Page and then routes by role.
+- HR and Supervisor can search employees; only HR can delete employees.
+- HR owns employee records; Supervisor owns shift scheduling.
+- Detailed use cases include Precondition, Trigger, Main Scenario, and Extensions.
+- Extensions use `1A`, `1B`, and similar numbering.
+- Search Employee and Filter by Employee are reused through include relationships.
+- Role terminology is consistent throughout.
+- `docs/use-cases.md` ends with the System Overall Overview.

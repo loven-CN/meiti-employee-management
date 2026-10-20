@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "梅提商城员工管理系统",
+  "description": "Meiti Mall Employee Management",
   "scripts": {
     "start": "node scripts/serve.js",
     "test": "node --test tests/core.test.js",
