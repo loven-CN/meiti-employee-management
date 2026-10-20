@@ -26,7 +26,7 @@ jobs:
 
       - name: Apply English source
         run: |
-          unzip -o meiti-english-update.zip -d .
+          unzip -o meiti-english-update.zip -d . -x ".github/workflows/pages.yml"
           rm meiti-english-update.zip
 
       - name: Commit applied source
